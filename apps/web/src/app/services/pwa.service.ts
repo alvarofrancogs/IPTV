@@ -18,6 +18,7 @@ import {
     CONNECTIVITY_GUARD_RESET,
     ERROR,
     isHostConnectivityFastFailMessage,
+    normalizeXtreamServerUrl,
     Playlist,
     PLAYLIST_PARSE_BY_URL,
     PLAYLIST_UPDATE,
