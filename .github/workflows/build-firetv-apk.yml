@@ -1,0 +1,74 @@
+name: Build Fire TV APK
+
+on:
+  push:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    name: Build Standalone Fire TV APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install pnpm
+        run: npm install --global pnpm@10.33.0
+
+      - name: Install project dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Build Web Application
+        run: pnpm nx build web --configuration=pwa
+
+      - name: Install Capacitor packages
+        run: npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
+
+      - name: Initialize Capacitor Android platform
+        run: |
+          npx cap add android
+
+      - name: Configure Android Manifest for Fire TV (Leanback & Cleartext HTTP)
+        run: |
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          
+          # Allow HTTP IPTV streams
+          sed -i 's/<application/<application android:usesCleartextTraffic="true"/g' "$MANIFEST"
+          
+          # Add Fire TV Leanback (TV banner and no touchscreen requirement)
+          sed -i '/<manifest/a \    <uses-feature android:name="android.software.leanback" android:required="false" />\n    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />' "$MANIFEST"
+          
+          # Add TV Intent Filter to MainActivity
+          sed -i '/<category android:name="android.intent.category.LAUNCHER" \/>/a \                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />' "$MANIFEST"
+
+      - name: Sync Capacitor project
+        run: npx cap sync android
+
+      - name: Build Android APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload Fire TV APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: IPTVnator-FireTV-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30

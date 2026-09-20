@@ -98,6 +98,16 @@ export class PwaService extends DataService {
     /** Proxy URL to avoid CORS issues */
     corsProxyUrl = getRuntimeBackendUrl();
 
+    isNativeApp(): boolean {
+        return (
+            typeof (window as any)?.Capacitor !== 'undefined' ||
+            window.location.protocol === 'capacitor:' ||
+            (window.location.hostname === 'localhost' &&
+                !window.electron &&
+                !this.corsProxyUrl)
+        );
+    }
+
     constructor() {
         super();
     }
@@ -380,6 +390,46 @@ export class PwaService extends DataService {
         sessionId?: string;
         suppressErrorLog?: boolean;
     }) {
+        if (this.isNativeApp()) {
+            try {
+                const baseUrl = normalizeXtreamServerUrl(payload.url);
+                const apiUrl = new URL(`${baseUrl}/player_api.php`);
+                Object.entries(payload.params).forEach(([k, v]) => {
+                    apiUrl.searchParams.append(
+                        k,
+                        k === 'username' || k === 'password' ? v.trim() : v
+                    );
+                });
+                const res = await fetch(apiUrl.toString(), {
+                    headers: {
+                        Accept: 'application/json',
+                        ...(payload.macAddress
+                            ? { Cookie: `mac=${payload.macAddress}` }
+                            : {}),
+                    },
+                });
+                const data = await res.json();
+                if (payload.connectionTest) {
+                    return { payload: data };
+                }
+                const result = {
+                    type: XTREAM_RESPONSE,
+                    payload: data,
+                    action: payload.params?.action,
+                };
+                window.postMessage(result);
+                return result;
+            } catch (err: any) {
+                const result = {
+                    type: ERROR,
+                    status: 500,
+                    message: err?.message || 'Connection error',
+                };
+                window.postMessage(result);
+                return result;
+            }
+        }
+
         const headers = payload.macAddress
             ? {
                   headers: {
@@ -705,6 +755,39 @@ export class PwaService extends DataService {
     }
 
     getPlaylistFromUrl(url: string, userAgent?: string): Observable<Playlist> {
+        if (this.isNativeApp()) {
+            return from(
+                fetch(url)
+                    .then((res) => {
+                        if (!res.ok) {
+                            throw new Error(
+                                `Failed to fetch playlist: ${res.status}`
+                            );
+                        }
+                        return res.text();
+                    })
+                    .then(async (text) => {
+                        const parserModule = await import(
+                            'iptv-playlist-parser'
+                        );
+                        const parseFn =
+                            (parserModule as any).parse ||
+                            (parserModule as any).default?.parse ||
+                            parserModule;
+                        const parsed = parseFn(text);
+                        return {
+                            ...parsed,
+                            url,
+                            title:
+                                url.split('/').pop()?.split('?')[0] ||
+                                'Playlist',
+                            count: parsed.items?.length || 0,
+                            importDate: new Date().toISOString(),
+                        } as Playlist;
+                    })
+            );
+        }
+
         const normalizedUserAgent = userAgent?.trim();
         return from(this.getProviderTargetId(url)).pipe(
             switchMap((targetId) =>
