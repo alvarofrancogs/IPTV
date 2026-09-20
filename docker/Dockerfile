@@ -43,7 +43,9 @@ COPY --from=build /usr/src/app/dist/apps/web-backend ./web-backend
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf.template
 COPY docker/docker-entrypoint.sh /usr/local/bin/iptvnator-entrypoint
 
-RUN chmod +x /usr/local/bin/iptvnator-entrypoint
+RUN sed -i 's/\r$//' /usr/local/bin/iptvnator-entrypoint \
+    && sed -i 's/\r$//' /etc/nginx/http.d/default.conf.template \
+    && chmod +x /usr/local/bin/iptvnator-entrypoint
 
 EXPOSE 80
 

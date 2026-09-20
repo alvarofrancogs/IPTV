@@ -1,1 +1,2 @@
 apps/web-e2e/src/fixtures/playback/unsupported.mkv binary
+*.sh text eol=lf
