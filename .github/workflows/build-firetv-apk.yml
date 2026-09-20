@@ -25,8 +25,9 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Accept Android SDK Licenses
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
 
       - name: Install pnpm
         run: npm install --global pnpm@10.33.0
@@ -38,7 +39,7 @@ jobs:
         run: pnpm nx build web --configuration=pwa
 
       - name: Install Capacitor packages
-        run: npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
+        run: npm install --no-save @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
 
       - name: Initialize Capacitor Android platform
         run: |
@@ -64,7 +65,7 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload Fire TV APK Artifact
         uses: actions/upload-artifact@v4
