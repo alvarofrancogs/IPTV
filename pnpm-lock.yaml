@@ -384,8 +384,8 @@ importers:
         specifier: ^26.15.7
         version: 26.15.7(electron-builder-squirrel-windows@26.15.7)
       electron-playwright-helpers:
-        specifier: 1.8.2
-        version: 1.8.2
+        specifier: 3.1.2
+        version: 3.1.2
       esbuild:
         specifier: 0.28.2
         version: 0.28.2
@@ -1635,6 +1635,11 @@ packages:
   '@electron/asar@3.4.1':
     resolution: {integrity: sha512-i4/rNPRS84t0vSRa2HorerGRXWyF4vThfHesw0dmcWHp+cspK743UanA0suA5Q5y8kzY2y6YKrvbIUn69BCAiA==}
     engines: {node: '>=10.12.0'}
+    hasBin: true
+
+  '@electron/asar@4.3.0':
+    resolution: {integrity: sha512-k/FFC/NQoTykGBi/Ga4L4KorsAKDdkK0LfNVG90eUG6vPVpJaL3iR9V1ZLbzBAF3QpojK5DcaGOdQOheKZv4JQ==}
+    engines: {node: '>=22.12.0'}
     hasBin: true
 
   '@electron/fuses@1.8.0':
@@ -5017,8 +5022,12 @@ packages:
   brace-expansion@1.1.18:
     resolution: {integrity: sha512-Edep/X9fGqVNmzKBVsDYIOtD+z1tuezV70LBjdCst9Tqu76lsnvRiZ6oTic1n+/BIwX6QDGAO94PN4N2SADvtw==}
 
-  brace-expansion@2.1.4:
-    resolution: {integrity: sha512-hGfVzPxthbf3+2yjg/RBs60cB0FhqBS/zvdV/4wn4/BmN0bNMMHPc4V/BbFieqf1TKAGGAHnY4eSjajCl0f2Xg==}
+  brace-expansion@2.1.7:
+    resolution: {integrity: sha512-uZbew1NqdmPDTMJ8ah1y+b+9QEJrfkXFk3RcTQw3X0jW/xRUvFKsg1CfQdSYGdTbXZWExtU3J3ccxtnfw1Fi0g==}
+
+  brace-expansion@5.0.12:
+    resolution: {integrity: sha512-YovQ3rzhaLMIrDjNDMkNS01tea93qhEhG5xy8f6+R0l+dw3Ki+5sCoIoI942iuLZTHWogWktgwVDhU09iNEimQ==}
+    engines: {node: 20 || >=22}
 
   brace-expansion@5.0.9:
     resolution: {integrity: sha512-ScQ4IuvIEF1TMlP7Zt+vjJ//9zlPb2SDcxWxM3bk8s6t6GGdJ7KO1dCcTidOPJKePW30LE/2cT7wCyPho9/Wxg==}
@@ -5735,8 +5744,9 @@ packages:
     peerDependencies:
       electron: '>=15.0.0'
 
-  electron-playwright-helpers@1.8.2:
-    resolution: {integrity: sha512-sM9fDSEFDOptKDa8oiNphiXdR1KR1uFe8yHnlrnvyQE1ScnHizca/SoYvUdtn+5IuVNTkT8MesKWJ6seS4/zuA==}
+  electron-playwright-helpers@3.1.2:
+    resolution: {integrity: sha512-YQLbe5qglTHlcvKHUnetGfkk9buepcyLwbX2ALZlsps9GYtepj01BD7XoFe/YLuMy7HPejyV+2rwz/pehE5B6g==}
+    engines: {node: '>=22.12.0'}
 
   electron-publish@26.15.3:
     resolution: {integrity: sha512-g/2bn8YTavY4cuS5F+jOS7zmZbXXBV8KZ8yHKfJjFPoKtzBqrpCdNPxBd3tqdBwP7BVd0lGzf7Bk2s0KesWZ4Q==}
@@ -11375,6 +11385,11 @@ snapshots:
       glob: 7.2.3
       minimatch: 3.1.5
 
+  '@electron/asar@4.3.0':
+    dependencies:
+      glob: 13.0.6
+      minimatch: 10.2.6
+
   '@electron/fuses@1.8.0':
     dependencies:
       chalk: 4.1.2
@@ -14688,9 +14703,13 @@ snapshots:
       balanced-match: 1.0.2
       concat-map: 0.0.1
 
-  brace-expansion@2.1.4:
+  brace-expansion@2.1.7:
     dependencies:
       balanced-match: 1.0.2
+
+  brace-expansion@5.0.12:
+    dependencies:
+      balanced-match: 4.0.4
 
   brace-expansion@5.0.9:
     dependencies:
@@ -15299,9 +15318,9 @@ snapshots:
       ajv: 8.20.0
       electron: 43.3.0
 
-  electron-playwright-helpers@1.8.2:
+  electron-playwright-helpers@3.1.2:
     dependencies:
-      '@electron/asar': 3.4.1
+      '@electron/asar': 4.3.0
 
   electron-publish@26.15.3:
     dependencies:
@@ -18009,7 +18028,7 @@ snapshots:
 
   minimatch@10.2.6:
     dependencies:
-      brace-expansion: 5.0.9
+      brace-expansion: 5.0.12
 
   minimatch@3.1.5:
     dependencies:
@@ -18017,11 +18036,11 @@ snapshots:
 
   minimatch@5.1.9:
     dependencies:
-      brace-expansion: 2.1.4
+      brace-expansion: 2.1.7
 
   minimatch@9.0.9:
     dependencies:
-      brace-expansion: 2.1.4
+      brace-expansion: 2.1.7
 
   minimist@1.2.8: {}
 
