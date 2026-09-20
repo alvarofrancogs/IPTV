@@ -14,10 +14,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6.0.10
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
 
       - name: Setup Java JDK
         uses: actions/setup-java@v4
@@ -29,34 +33,11 @@ jobs:
         run: |
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
 
-      - name: Install pnpm
-        run: npm install --global pnpm@10.33.0
-
       - name: Install project dependencies
-        run: pnpm install --frozen-lockfile --ignore-scripts
+        run: pnpm install --frozen-lockfile
 
       - name: Build Web Application
-        run: pnpm nx build web --configuration=pwa
-
-      - name: Install Capacitor packages
-        run: npm install --no-save @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
-
-      - name: Initialize Capacitor Android platform
-        run: |
-          npx cap add android
-
-      - name: Configure Android Manifest for Fire TV (Leanback & Cleartext HTTP)
-        run: |
-          MANIFEST="android/app/src/main/AndroidManifest.xml"
-          
-          # Allow HTTP IPTV streams
-          sed -i 's/<application/<application android:usesCleartextTraffic="true"/g' "$MANIFEST"
-          
-          # Add Fire TV Leanback (TV banner and no touchscreen requirement)
-          sed -i '/<manifest/a \    <uses-feature android:name="android.software.leanback" android:required="false" />\n    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />' "$MANIFEST"
-          
-          # Add TV Intent Filter to MainActivity
-          sed -i '/<category android:name="android.intent.category.LAUNCHER" \/>/a \                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />' "$MANIFEST"
+        run: pnpm nx build web --skip-nx-cache
 
       - name: Sync Capacitor project
         run: npx cap sync android
