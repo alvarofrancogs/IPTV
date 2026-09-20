@@ -43,6 +43,7 @@ import { PlaybackKeepAwakeService } from './services/playback-keep-awake.service
 import { PlaylistOpenRequestService } from './services/playlist-open-request.service';
 import { AppUpdateNotificationPanelComponent } from './app-update-notification-panel.component';
 import { AppStartupStatusComponent } from './app-startup-status.component';
+import { TvNavigationService } from './services/tv-navigation.service';
 
 const debugAppComponent = createDevLogger('AppComponent');
 
@@ -83,11 +84,15 @@ export class AppComponent implements OnInit {
     private runtime = inject(RuntimeCapabilitiesService);
     private readonly workspaceShellActions = inject(WORKSPACE_SHELL_ACTIONS);
     private readonly contextDrawer = inject(WorkspaceShellContextDrawerService);
+    private readonly tvNavigation = inject(TvNavigationService);
 
     /** Default language as fallback */
     private readonly DEFAULT_LANG = Language.ENGLISH;
 
     constructor() {
+        // Initialize TV remote and D-Pad spatial navigation
+        this.tvNavigation.init();
+
         // Body-level class (like 'dark-theme') so layout adjustments also
         // reach content rendered outside app-root, e.g. cdk-overlay content.
         if (this.runtime.usesCustomWindowControls) {

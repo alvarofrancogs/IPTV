@@ -1,16 +1,17 @@
 ---
 services:
   iptvnator:
-    image: 4gray/iptvnator:latest
+    container_name: iptvnator-firetv
+    image: iptvnator-firetv:latest
     build:
       context: ..
       dockerfile: docker/Dockerfile
     restart: unless-stopped
     ports:
-      - "4333:80"
+      - "4334:80"
     environment:
       BACKEND_URL: /api
-      CLIENT_URL: http://localhost:4333
+      CLIENT_URL: http://localhost:4334
       PORT: "3000"
       IPTVNATOR_PROXY_ALLOW_PRIVATE_NETWORKS: "0"
     healthcheck:
