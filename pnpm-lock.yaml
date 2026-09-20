@@ -414,8 +414,8 @@ importers:
         specifier: 5.2.1
         version: 5.2.1
       globals:
-        specifier: 15.9.0
-        version: 15.9.0
+        specifier: 17.12.0
+        version: 17.12.0
       html-escaper:
         specifier: 3.0.3
         version: 3.0.3
@@ -6492,12 +6492,8 @@ packages:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
     engines: {node: '>=18'}
 
-  globals@15.9.0:
-    resolution: {integrity: sha512-SmSKyLLKFbSr6rptvP8izbyxJL4ILwqO9Jg23UA0sDlGlu58V59D1//I3vlc0KJphVdUR7vMjHIplYnzBxorQA==}
-    engines: {node: '>=18'}
-
-  globals@17.9.0:
-    resolution: {integrity: sha512-m/MvAW61QVU5VDNF1Vj8axt016h8w7L5TU1e9zlab7XIttAT2YAlCwl75K1fOqvMM9apmD7lbCIRhpfkhmxhCg==}
+  globals@17.12.0:
+    resolution: {integrity: sha512-cezEd/DTyyht9cvSSURyygXPfy04GtWO/5e6ZPvH7fCtjKz9PYOmuawphw1Ctd1f6C+5JypXfGD7ahNMXvevBA==}
     engines: {node: '>=18'}
 
   globalthis@1.0.4:
@@ -13045,7 +13041,7 @@ snapshots:
       '@typescript-eslint/type-utils': 8.69.0(eslint@9.39.2(jiti@1.21.7))(typescript@6.0.3)
       '@typescript-eslint/utils': 8.69.0(eslint@9.39.2(jiti@1.21.7))(typescript@6.0.3)
       confusing-browser-globals: 1.0.11
-      globals: 17.9.0
+      globals: 17.12.0
       jsonc-eslint-parser: 2.4.2
       picocolors: 1.1.1
       semver: 7.8.5
@@ -16506,9 +16502,7 @@ snapshots:
 
   globals@14.0.0: {}
 
-  globals@15.9.0: {}
-
-  globals@17.9.0: {}
+  globals@17.12.0: {}
 
   globalthis@1.0.4:
     dependencies:
